@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -15,16 +17,14 @@ public class ReviewService {
 
     @Transactional
     public void createreview(ReviewForm reviewform){
-        String title = reviewform.getTitle();
-        String content = reviewform.getContent();
-        String checklist = reviewform.getChecklist();
-        String weather = reviewform.getWeather();
 
         Review review = new Review();
-        review.setTitle(title);
-        review.setContent(content);
-        review.setChecklist(checklist);
-        review.setWeather(weather);
+        review.setTitle(reviewform.getTitle());
+        review.setContent(reviewform.getContent());
+        review.setChecklist(reviewform.getChecklist());
+        review.setWeather(reviewform.getWeather());
+
+        review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
         reviewrepository.save(review);
     }
 }

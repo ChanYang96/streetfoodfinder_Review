@@ -1,4 +1,4 @@
-package com.example.review;
+package com.example.review.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +13,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable() // CSRF 비활성화
                 .authorizeRequests()
-                .antMatchers("/review/**").permitAll() // 리뷰 경로에 대한 권한 허용
+                .antMatchers("/review/**").permitAll() // 리뷰 대한 권한 허용
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

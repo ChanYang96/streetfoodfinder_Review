@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 @NoArgsConstructor
@@ -24,8 +25,6 @@ public class ReviewForm {
                 .content(from.getContent())
                 .checklist(from.getChecklist())
                 .weather(from.getWeather())
-                //.updateDate(LocalDateTime.now())
-                //.createDate(LocalDateTime.now())
                 .build();
     }
 }

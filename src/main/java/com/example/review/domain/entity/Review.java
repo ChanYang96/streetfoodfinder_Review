@@ -29,8 +29,6 @@ public class Review {
     @Column(columnDefinition = "TEXT NOT NULL")//반드시 기입
     private String weather;
 
-    /*@NotNull //날짜 관련
+    @NotNull //날짜 관련
     private LocalDateTime createDate;
-    @NotNull
-    private LocalDateTime updateDate;*/
 }
