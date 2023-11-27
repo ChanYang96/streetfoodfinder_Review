@@ -31,4 +31,8 @@ public class Review {
 
     @NotNull //날짜 관련
     private LocalDateTime createDate;
+
+    @Lob //1126 이미지 업로드
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
 }

@@ -18,7 +18,7 @@ public class ReviewController {
     private final ReviewService reviewservice;
 
     @PostMapping("/create-review")
-    public ResponseEntity<String> review(@RequestBody ReviewForm form){
+    public ResponseEntity<String> CreateReview(@RequestBody ReviewForm form){
         reviewservice.createreview(form);
         return ResponseEntity.ok("리뷰 작성 완료");
     }
