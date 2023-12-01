@@ -1,5 +1,6 @@
 package com.example.review.service;
 
+import com.example.review.configuration.S3Config;
 import com.example.review.domain.entity.Review;
 import com.example.review.domain.form.ReviewForm;
 import com.example.review.repository.ReviewRepository;
@@ -14,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewrepository;
+    private final S3Config amazonS3Client;
 
     @Transactional
     public void createreview(ReviewForm reviewform){

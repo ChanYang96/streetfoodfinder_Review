@@ -34,5 +34,5 @@ public class Review {
 
     @Lob //1126 이미지 업로드
     @Column(name = "image", columnDefinition = "LONGBLOB")
-    private byte[] image;
+    private byte[] photo;
 }

@@ -19,7 +19,7 @@ public class ReviewForm {
     private String content; //내용
     private String checklist; //체크리스트
     private String weather; //날씨
-    private MultipartFile imageFile; //1126 이미지 필드
+    private MultipartFile photo; //1126 이미지 필드
 
     public static Review ReviewForm (ReviewForm from){
         return Review.builder()
