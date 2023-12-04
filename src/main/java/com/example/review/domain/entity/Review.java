@@ -33,6 +33,9 @@ public class Review {
     private LocalDateTime createDate;
 
     @Lob //1126 이미지 업로드
-    @Column(name = "image", columnDefinition = "LONGBLOB")
+    @Column(name = "photo")
     private byte[] photo;
+
+    @Column(columnDefinition = "TEXT") //1204 추가
+    private String photoUrl;
 }
