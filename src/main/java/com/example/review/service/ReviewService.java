@@ -20,22 +20,17 @@ public class ReviewService {
     private final S3Config amazonS3Client;
     private final UploadPhotoService uploadPhotoService;
 
-    @Transactional
-    public void createReview(ReviewForm reviewForm) {
-        byte[] photoBytes = null;
+    public void CreateReview(ReviewForm reviewform) {
 
-        if (reviewForm.getPhoto() != null && !reviewForm.getPhoto().isEmpty()) {
-            try {
-                photoBytes = reviewForm.getPhoto().getBytes();
-            } catch (IOException e) {
-                throw new RuntimeException("이미지 업로드에 실패했습니다.", e);
-            }
-        }
+        Review review = new Review();
+        review.setTitle(reviewform.getTitle());
+        review.setContent(reviewform.getContent());
+        review.setChecklist(reviewform.getChecklist());
+        review.setWeather(reviewform.getWeather());
 
-        Review review = ReviewForm.toEntity(reviewForm, photoBytes);
-        review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS));
+
+        review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
         reviewrepository.save(review);
-    }
 
     /*@Transactional
     public void createreview(ReviewForm reviewform, MultipartFile image){
@@ -77,4 +72,5 @@ public class ReviewService {
         review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
         reviewrepository.save(review);
     }*/
+    }
 }
