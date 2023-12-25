@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByTitle(String title);
     Optional<Review> findByContent(String content);
     Optional<Review> findByChecklist(String checklist);

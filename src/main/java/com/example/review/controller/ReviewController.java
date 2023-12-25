@@ -18,7 +18,7 @@ public class ReviewController {
     private final ReviewService reviewservice;
     private final UploadPhotoService uploadPhotoService;
 
-    @PostMapping("/create-review-with-image")
+    @PostMapping("/create-review")
     public ResponseEntity<?> createReviewWithImage(
             @RequestPart("form") ReviewForm form,
             @RequestPart("image") MultipartFile image
@@ -26,5 +26,14 @@ public class ReviewController {
         reviewservice.CreateReview(form);
         uploadPhotoService.upload(image);
         return ResponseEntity.ok("리뷰 작성 완료");
+    }
+
+    @PutMapping("/update-review/{reviewId}")
+    public ResponseEntity<?> updateReview(
+            @PathVariable Long reviewId,
+            @RequestBody ReviewForm form
+    ) {
+        reviewservice.updateReview(reviewId, form);
+        return ResponseEntity.ok("리뷰 수정 완료");
     }
 }

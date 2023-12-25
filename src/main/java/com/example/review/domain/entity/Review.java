@@ -32,10 +32,5 @@ public class Review {
     @NotNull //날짜 관련
     private LocalDateTime createDate;
 
-    /*@Lob //1126 이미지 업로드
-    @Column(name = "photo")
-    private byte[] photo;
-
-    @Column(columnDefinition = "TEXT") //1204 추가
-    private String photoUrl;*/
+    private LocalDateTime updateDate; // 수정된 날짜
 }

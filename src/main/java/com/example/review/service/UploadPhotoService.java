@@ -1,11 +1,8 @@
 package com.example.review.service;
 
-
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import com.example.review.configuration.S3Config;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,11 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Slf4j
@@ -32,8 +28,16 @@ public class UploadPhotoService { //이미지 업로드 관련 서비스
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    // 업로드된 파일의 순서
+    private static AtomicInteger uploadCounter = new AtomicInteger(0);
+
     public String upload(MultipartFile multipartFile) throws IOException {
-        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        // 업로드 날짜
+        LocalDateTime uploadDateTime = LocalDateTime.now();
+        int uploadOrder = uploadCounter.incrementAndGet();
+
+        //버킷에 저장되는 이미지 이름 지정
+        String s3FileName = uploadOrder + "_" + uploadDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")) + ".jpg";
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(multipartFile.getInputStream().available());
@@ -42,4 +46,5 @@ public class UploadPhotoService { //이미지 업로드 관련 서비스
 
         return amazonS3.getUrl(bucket, s3FileName).toString();
     }
+
 }

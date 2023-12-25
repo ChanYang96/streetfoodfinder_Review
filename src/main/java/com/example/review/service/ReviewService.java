@@ -27,50 +27,25 @@ public class ReviewService {
         review.setContent(reviewform.getContent());
         review.setChecklist(reviewform.getChecklist());
         review.setWeather(reviewform.getWeather());
-
-
         review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
+
         reviewrepository.save(review);
 
-    /*@Transactional
-    public void createreview(ReviewForm reviewform, MultipartFile image){
-        String photoUrl = null;
-
-        if (reviewform.getPhoto() != null && !reviewform.getPhoto().isEmpty()) {
-            try {
-                // 이미지 업로드 후 URL 받아오기
-                photoUrl = uploadPhotoService.upload(reviewform.getPhoto(), "1.jpg");
-            } catch (IOException e) {
-                throw new RuntimeException("이미지 업로드에 실패했습니다.", e);
-            }
-        }
-
-        // Review 엔터티 생성
-        Review review = ReviewForm.createReview(reviewform, photoUrl);
-        reviewrepository.save(review);
-    }*/
-
-    /*@Transactional
-    public void createreview(ReviewForm reviewform){
-
-        Review review = new Review();
-        review.setTitle(reviewform.getTitle());
-        review.setContent(reviewform.getContent());
-        review.setChecklist(reviewform.getChecklist());
-        review.setWeather(reviewform.getWeather());
-
-        if (reviewform.getPhoto() != null && !reviewform.getPhoto().isEmpty()) {
-            try {
-                byte[] photoBytes = reviewform.getPhoto().getBytes();
-                review.setPhoto(photoBytes);
-            } catch (IOException e) {
-                // 이미지 업로드 실패 시 예외 처리
-                throw new RuntimeException("이미지 업로드에 실패했습니다.", e);
-            }
-        }
-
-        review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
-        reviewrepository.save(review);
-    }*/
     }
+
+    public void updateReview(Long reviewId, ReviewForm reviewForm) {
+        Review existingReview = reviewrepository.findById(reviewId) //리뷰 아이디로 찾는다. 추후 이메일 같은 고유 값으로 수정
+                .orElseThrow(() -> new RuntimeException("Review not found with id: " + reviewId));
+
+        // 엔티티 클래스 내에 로직을 두지 않고 ReviewService에서 처리
+        existingReview.setTitle(reviewForm.getTitle());
+        existingReview.setContent(reviewForm.getContent());
+        existingReview.setChecklist(reviewForm.getChecklist());
+        existingReview.setWeather(reviewForm.getWeather());
+        existingReview.setUpdateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //수정할 항목들
+
+        reviewrepository.save(existingReview);
+    }
+
+
 }
