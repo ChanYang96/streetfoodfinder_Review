@@ -20,7 +20,7 @@ public class ReviewService {
     private final S3Config amazonS3Client;
     private final UploadPhotoService uploadPhotoService;
 
-    public void CreateReview(ReviewForm reviewform) {
+    /*public void CreateReview(ReviewForm reviewform) { //1226 수정 전
 
         Review review = new Review();
         review.setTitle(reviewform.getTitle());
@@ -30,7 +30,26 @@ public class ReviewService {
         review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
 
         reviewrepository.save(review);
+    }*/
 
+    public void CreateReview(ReviewForm reviewform, MultipartFile image) throws IOException {
+        Review review = new Review();
+        //Review review = null;
+        if (reviewform != null) { //리뷰 폼에서 입력 받은 값이 존재 한다면 업로드
+            //review = new Review();
+            //Review review = new Review();
+            review.setTitle(reviewform.getTitle());
+            review.setContent(reviewform.getContent());
+            review.setChecklist(reviewform.getChecklist());
+            review.setWeather(reviewform.getWeather());
+            review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); // 현재 날짜 자동
+            reviewrepository.save(review);
+        }
+
+
+        if (image != null) {
+            uploadPhotoService.upload(image, review.getReviewId());
+        }
     }
 
     public void updateReview(Long reviewId, ReviewForm reviewForm) {
@@ -47,5 +66,14 @@ public class ReviewService {
         reviewrepository.save(existingReview);
     }
 
+    public void deleteReview(Long reviewId) { //0102 삭제 기능
+        // 리뷰 ID를 통해 리뷰를 찾기
+        Review review = reviewrepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id=" + reviewId));
 
+        // DB에서 리뷰를 삭제
+        reviewrepository.delete(review);
+
+        uploadPhotoService.delete(reviewId); //이미지 삭제 메소드 호출
+    }
 }
