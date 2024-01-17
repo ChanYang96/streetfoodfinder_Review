@@ -20,12 +20,13 @@ public class ReviewForm {
     private String checklist; //체크리스트
     private String weather; //날씨
 
-    public static Review toEntity(ReviewForm form) {
+    public static Review reviewfrom (ReviewForm form, LocalDateTime createDate) {
         return Review.builder()
                 .title(form.getTitle())
                 .content(form.getContent())
                 .checklist(form.getChecklist())
                 .weather(form.getWeather())
+                .createDate(createDate)
                 .build();
     }
 }

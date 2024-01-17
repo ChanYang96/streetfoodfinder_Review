@@ -20,50 +20,34 @@ public class ReviewService {
     private final S3Config amazonS3Client;
     private final UploadPhotoService uploadPhotoService;
 
-    /*public void CreateReview(ReviewForm reviewform) { //1226 수정 전
-
-        Review review = new Review();
-        review.setTitle(reviewform.getTitle());
-        review.setContent(reviewform.getContent());
-        review.setChecklist(reviewform.getChecklist());
-        review.setWeather(reviewform.getWeather());
-        review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //현재 날짜 자동
-
-        reviewrepository.save(review);
-    }*/
-
     public void CreateReview(ReviewForm reviewform, MultipartFile image) throws IOException {
         Review review = new Review();
-        //Review review = null;
-        if (reviewform != null) { //리뷰 폼에서 입력 받은 값이 존재 한다면 업로드
-            //review = new Review();
-            //Review review = new Review();
-            review.setTitle(reviewform.getTitle());
-            review.setContent(reviewform.getContent());
-            review.setChecklist(reviewform.getChecklist());
-            review.setWeather(reviewform.getWeather());
-            review.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); // 현재 날짜 자동
+
+        if (reviewform != null) { //폼 클래스에서 받은 값이 존재 한다면
+            LocalDateTime createDate = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES); //작성한 날짜 지정
+            review = ReviewForm.reviewfrom(reviewform, createDate); //폼 값과 시간 전달
             reviewrepository.save(review);
         }
 
 
-        if (image != null) {
+        if (image != null) { //이미지 파일을 받은 것이 있다면
             uploadPhotoService.upload(image, review.getReviewId());
         }
     }
 
     public void updateReview(Long reviewId, ReviewForm reviewForm) {
-        Review existingReview = reviewrepository.findById(reviewId) //리뷰 아이디로 찾는다. 추후 이메일 같은 고유 값으로 수정
-                .orElseThrow(() -> new RuntimeException("Review not found with id: " + reviewId));
+        Review existingReview = reviewrepository.findById(reviewId) //리뷰 아이디로 찾는다.
+                .orElseThrow(() -> new RuntimeException("해당 리뷰가 없습니다 id: " + reviewId));
 
-        // 엔티티 클래스 내에 로직을 두지 않고 ReviewService에서 처리
-        existingReview.setTitle(reviewForm.getTitle());
-        existingReview.setContent(reviewForm.getContent());
-        existingReview.setChecklist(reviewForm.getChecklist());
-        existingReview.setWeather(reviewForm.getWeather());
-        existingReview.setUpdateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)); //수정할 항목들
+        if (reviewForm != null) {
+            existingReview.updateTitle(reviewForm.getTitle());
+            existingReview.updateContent(reviewForm.getContent());
+            existingReview.updateChecklist(reviewForm.getChecklist());
+            existingReview.updateWeather(reviewForm.getWeather());
+            existingReview.updateUpdateDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS));
 
-        reviewrepository.save(existingReview);
+            reviewrepository.save(existingReview);
+        }
     }
 
     public void deleteReview(Long reviewId) { //0102 삭제 기능

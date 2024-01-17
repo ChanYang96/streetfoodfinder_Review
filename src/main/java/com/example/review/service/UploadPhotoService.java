@@ -22,19 +22,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor    // final 멤버변수가 있으면 생성자 항목에 포함시킴
 @Component
 @Service
-public class UploadPhotoService { //이미지 업로드 관련 서비스
+public class UploadPhotoService {
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    // 업로드된 파일의 순서
-    //private static AtomicInteger uploadCounter = new AtomicInteger(0);
-
     public String upload(MultipartFile multipartFile, Long reviewId) throws IOException {
         // 업로드 날짜
         LocalDateTime uploadDateTime = LocalDateTime.now();
-        //int uploadOrder = uploadCounter.incrementAndGet();
 
         //버킷에 저장되는 이미지 이름 지정
         String s3FileName = reviewId + "_" + uploadDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")) + ".jpg";
@@ -61,5 +57,4 @@ public class UploadPhotoService { //이미지 업로드 관련 서비스
             objectListing = amazonS3.listNextBatchOfObjects(objectListing);
         } while (objectListing.isTruncated());
     }
-
 }

@@ -33,4 +33,29 @@ public class Review {
     private LocalDateTime createDate;
 
     private LocalDateTime updateDate; // 수정된 날짜
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    //수정기능
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateChecklist(String checklist) {
+        this.checklist = checklist;
+    }
+
+    public void updateWeather(String weather) {
+        this.weather = weather;
+    }
+
+    public void updateCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public void updateUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
+    }
 }
